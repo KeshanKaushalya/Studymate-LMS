@@ -8,6 +8,14 @@ module.exports = {
     'text-course-deatails-heading-small',
     'md:text-course-deatails-heading-large'
   ],
+  // ensure custom maxWidth and boxShadow utilities are emitted
+  // (Tailwind generates `max-w-<key>` and `shadow-<key>` classes)
+  safelist: [
+    'text-course-deatails-heading-small',
+    'md:text-course-deatails-heading-large',
+    'max-w-course-card',
+    'shadow-custom-card'
+  ],
   theme: {
     extend: {
       fontSize: {
@@ -22,6 +30,12 @@ module.exports = {
       },
       spacing: {
         'section-height' : '500px',
+      },
+      maxWidth: {
+        'course-card' : '424px'
+      },
+      boxShadow: {
+        'custom-card' : '0px 4px 15px 2px rgba(0, 0, 0, 0.1)'
       }
     },
   },
