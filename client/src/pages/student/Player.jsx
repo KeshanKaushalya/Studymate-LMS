@@ -10,7 +10,7 @@ const Player = () => {
   const {courseId} = useParams()
   const [courseData, setCourseData] = useState(null)
   const [openSections, setOpenSection] = useState({})
-  const [playerData, setPlayerdata] = useState(null)
+  const [playerData, setPlayerData] = useState(null)
 
   const getCourseData = ()=>{
     enrolledCourses.map((course)=>{
@@ -39,10 +39,6 @@ const Player = () => {
         {/* left column */}
           <div className='text-gray-800'>
             <h2 className='text-xl font-semibold'>Course Structure</h2>
-
-
-
-
           </div>
 
       
@@ -50,7 +46,7 @@ const Player = () => {
         {/* right column */}
           <div></div>
 
-    </div>
+      </div>
     </>
   )
 }
