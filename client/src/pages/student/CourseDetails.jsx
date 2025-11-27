@@ -11,7 +11,7 @@ const CourseDetails = () => {
 
    const {id} = useParams()
 
-   const [courseData, setCoursedata] = useState(null)
+   const [courseData, setCourseData] = useState(null)
    const [openSections, setOpenSection] = useState({})
    const [isAlreadyEnrolled, setIsAlreadyEnrolled] = useState(false)
    const [playerData, setPlayerData] = useState(null)
@@ -20,7 +20,7 @@ const CourseDetails = () => {
 
    const fetchCourseData = async ()=>{
      const findCourse = allCourses.find(course => course._id === id)
-     setCoursedata(findCourse);
+     setCourseData(findCourse);
    }
 
    useEffect(()=>{
@@ -64,6 +64,7 @@ const CourseDetails = () => {
 
       <div className='pt-8 text-gray-800'>
            <h2 className='text-xl font-semibold'>Course Structure</h2>
+
            <div className='pt-5'>
               {courseData.courseContent.map((chapter, index)=> (
                 <div key={index} className='border border-gray-300 bg-white mb-2 rounded'>
