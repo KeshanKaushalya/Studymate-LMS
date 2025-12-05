@@ -51,7 +51,7 @@ export const addCourse = async (req, res)=>{
 export const getEducatorCourses = async (req, res)=>{
     try {
         const educator = req.auth.userId
-        const courses = await Course.find({ educator})
+        const courses = await Course.find({educator})
         res.json({ success: true, courses })
     } catch (error) {
         res.json({ success: false, message: error.message })
@@ -63,7 +63,7 @@ export const getEducatorCourses = async (req, res)=>{
 export const educatorDashboardData = async (req, res)=>{
     try {
         const educator = req.auth.userId;
-        const courses = await Course.find({ educator});
+        const courses = await Course.find({educator});
         const totalCourses = courses.length;
 
         const courseIds = courses.map(course => course._id);
@@ -81,7 +81,7 @@ export const educatorDashboardData = async (req, res)=>{
         for(const course of courses){
             const students = await User.find({
                 _id: {$in: course.enrolledStudents}
-            }, 'name image');
+            }, 'name imageUrl');
 
             students.forEach(student => {
                 enrolledStudentsData.push({
