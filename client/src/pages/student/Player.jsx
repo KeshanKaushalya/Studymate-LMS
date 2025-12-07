@@ -22,6 +22,26 @@ const Player = () => {
   const [progressData, setProgressData] = useState(null)
   const [initialRating, setInitialRating] = useState(0)
 
+  // Robust extractor for YouTube video IDs from common URL variants
+  const getYouTubeId = (url) => {
+    if (!url || typeof url !== 'string') return null
+    // common patterns: youtu.be/ID, youtube.com/watch?v=ID, youtube.com/embed/ID, youtube.com/v/ID
+    const re = /(?:youtube(?:-nocookie)?\.com\/(?:.*v=|embed\/|v\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+    const m = url.match(re)
+    if (m && m[1]) return m[1]
+    // try URL search param v=
+    try {
+      const u = new URL(url)
+      const v = u.searchParams.get('v')
+      if (v && v.length === 11) return v
+    } catch (e) {
+      // not a full URL, ignore
+    }
+    // fallback: if the string itself looks like an id
+    if (/^[a-zA-Z0-9_-]{11}$/.test(url)) return url
+    return null
+  }
+
   const getCourseData = ()=>{
     enrolledCourses.map((course)=>{
       if(course._id === courseId){
@@ -106,6 +126,9 @@ const Player = () => {
     getCourseProgress()
   }, [])
 
+  // compute a valid YouTube id (if playerData exists)
+  const videoId = playerData ? getYouTubeId(playerData.lectureUrl) : null
+
   return courseData ? (
     <>
       <div className='p-4 sm:p-10 flex flex-col-reverse md:grid md:grid-cols-2 gap-10 md:px-36'>
@@ -163,17 +186,21 @@ const Player = () => {
           <div className='md:mt-10'>
             {playerData ? (
               <div>
-                <YouTube videoId={playerData.lectureUrl.split('/').pop()} 
-                iframeClassName='w-full aspect-video'/>
+                {videoId ? (
+                  <YouTube videoId={videoId} iframeClassName='w-full aspect-video' />
+                ) : (
+                  <div className='p-4 bg-gray-100 rounded'>
+                    <p className='text-sm text-gray-700'>Invalid YouTube URL. <a href={playerData.lectureUrl} target='_blank' rel='noreferrer' className='text-blue-500 underline'>Open link</a></p>
+                  </div>
+                )}
                 <div className='flex justify-between items-center mt-1'>
                   <p>{playerData.chapter}.{playerData.lecture} {playerData.lectureTitle}</p>
                   <button onClick={()=> markLectureAsCompleted(playerData.lectureId)} className='text-blue-600'>{progressData && progressData.lectureCompleted.includes(playerData.lectureId) ? 'Completed' : 'Mark complete'}</button>
                 </div>
               </div>
-            )
-            : 
-            <img src={courseData ? courseData.courseThumbnail : ''} alt="" />
-            }
+            ) : (
+              <img src={courseData ? courseData.courseThumbnail : ''} alt="" />
+            )}
           </div>
 
       </div>
