@@ -2,6 +2,7 @@ import { toast } from 'react-toastify'
 import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { AppContext } from '../../context/AppContext'
+import { useClerk } from '@clerk/clerk-react'
 import Loading from '../../components/student/Loading'
 import { assets } from '../../assets/assets'
 import humanizeDuration from 'humanize-duration'
@@ -18,7 +19,8 @@ const CourseDetails = () => {
    const [isAlreadyEnrolled, setIsAlreadyEnrolled] = useState(false)
    const [playerData, setPlayerData] = useState(null)
 
-   const {allCourses, calculateRating, calculateChapterTime, calculateCourseDuration, calculateNoOfLectures, currency, backendUrl, userData, getToken} = useContext(AppContext)
+  const {allCourses, calculateRating, calculateChapterTime, calculateCourseDuration, calculateNoOfLectures, currency, backendUrl, userData, getToken} = useContext(AppContext)
+  const { openSignIn } = useClerk()
 
    const fetchCourseData = async ()=>{
      try {
@@ -37,7 +39,9 @@ const CourseDetails = () => {
    const enrollCourse = async ()=>{
     try {
       if(!userData){
-        return toast.warn('Login to Enroll')
+        // open Clerk sign-in modal when user is not logged in
+        openSignIn()
+        return
       }
       if(isAlreadyEnrolled){
         return toast.warn('Already Enrolled')
@@ -76,7 +80,7 @@ const CourseDetails = () => {
    };
 
   return courseData ? (
-    <>
+ <>
     <div className='flex md:flex-row flex-col-reverse gap-10 relative items-start justify-between md:px-36 px-8 md:pt-30 pt-20 text-left'>
 
   {/* background gradient - put at z-0 so it's behind content in the same stacking context */}
@@ -121,7 +125,7 @@ const CourseDetails = () => {
                     <ul className='list-disc md:pl-10 pl-4 pr-4 py-2 text-gray-600 border-t border-gray-300'>
                       {chapter.chapterContent.map((lecture, i)=> (
                         <li key={i} className='flex items-start gap-2 py-1'>
-                          <img src={assets.play_icon} alt="play icon" className='w-4 h-4 mt-1'/>
+                          <img src={assets.play_icon} alt="play icon" className='w-4 h-4 mt-0'/>
                           <div className='flex items-center justify-between w-full text-gray-800 text-xs md:text-default'>
                             <p>{lecture.lectureTitle}</p>
                             <div className='flex gap-2'>
@@ -214,7 +218,7 @@ const CourseDetails = () => {
   </div>          
   </div>
   <Footer />
- </>
+  </>
   ): <Loading />
 }
 
