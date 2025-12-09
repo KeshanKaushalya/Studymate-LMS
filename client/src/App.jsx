@@ -5,6 +5,9 @@ import CoursesList from './pages/student/CoursesList'
 import CourseDetails from './pages/student/CourseDetails'
 import MyEnrollments from './pages/student/MyEnrollments'
 import Player from './pages/student/Player'
+import About from './pages/static/About'
+import Contact from './pages/static/Contact'
+import Privacy from './pages/static/Privacy'
 import Loading from './components/student/Loading'
 import Educator from './pages/educator/Educator'
 import Dashboard from './pages/educator/Dashboard'
@@ -31,6 +34,9 @@ const App = () => {
         <Route path='/course/:id' element={<CourseDetails />} />
         <Route path='/my-enrollments' element={<MyEnrollments />} />
         <Route path='/player/:courseId' element={<Player />} />
+        <Route path='/about' element={<About />} />
+        <Route path='/contact' element={<Contact />} />
+       <Route path='/privacy' element={<Privacy />} />
         <Route path='/loading/:path' element={<Loading />} />
         <Route path='/educator' element={<Educator />}>
             <Route path='/educator' element={<Dashboard/>} />
